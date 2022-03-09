@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ScanQR extends StatefulWidget {
   const ScanQR({Key? key}) : super(key: key);
@@ -27,22 +28,11 @@ class _ScanQRState extends State<ScanQR> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    // final expectedCodes = recognisedCodes.map((e) => e.type);
     controller.scannedDataStream.listen((scanData) {
       controller.pauseCamera();
-      print(scanData.code);
       setState(() {
         result = scanData;
       });
-      // if (expectedCodes.any((element) => scanData.code == element)) {
-      //   Navigator.of(context).push(
-      //     MaterialPageRoute(
-      //       builder: (context) => OrderPage(
-      //         item: recognisedCodes.firstWhere((element) => element.type == scanData.code),
-      //       ),
-      //     ),
-      //   );
-      // }
     });
   }
 
@@ -50,6 +40,7 @@ class _ScanQRState extends State<ScanQR> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("Scan QR Code"),
       ),
       body: Stack(
@@ -61,60 +52,148 @@ class _ScanQRState extends State<ScanQR> {
               cameraFacing: CameraFacing.front,
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,
-              // overlay: QrScannerOverlayShape(
-              //   borderRadius: 10,
-              //   borderWidth: 5,
-              //   borderColor: Colors.white,
-              // ),
+              overlay: QrScannerOverlayShape(
+                borderRadius: 10,
+                borderWidth: 5,
+                borderColor: Colors.white,
+              ),
             ),
           ),
 
           Align(
             alignment: Alignment.topRight,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    await controller?.toggleFlash();
-                    setState(() {});
-                  },
-                  icon: FutureBuilder(
-                    future: controller?.getFlashStatus(),
-                    builder: (context, snapshot) {
-                      return Text('Flash: ${snapshot.data}');
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 50,
-                ),
-                IconButton(
+            child: Container(
+              height: 50,
+              color: Colors.black54,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
                     onPressed: () async {
-                      await controller?.flipCamera();
+                      await controller?.toggleFlash();
                       setState(() {});
                     },
-                    icon: const Icon(Icons.cameraswitch))
-              ],
+                    icon: FutureBuilder(
+                      future: controller?.getFlashStatus(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data == true) {
+                          return const Icon(
+                            Icons.flash_auto,
+                            color: Colors.indigo,
+                          );
+                        } else {
+                          return const Icon(
+                            Icons.flash_off,
+                            color: Colors.indigo,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  IconButton(
+                      onPressed: () async {
+                        await controller?.flipCamera();
+                        setState(() {});
+                      },
+                      icon: const Icon(
+                        Icons.cameraswitch,
+                        color: Colors.indigo,
+                      ))
+                ],
+              ),
             ),
           ),
 
           // Text
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 4,
-              width: double.maxFinite,
-              color: Colors.cyan.withOpacity(0.2),
-              child: Center(
-                child: Text(
-                  'Place the camera to the QR code to scan.',
-                  style: Theme.of(context).textTheme.headline4,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          )
+          result != null
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Card(
+                      child: Container(
+                    width: MediaQuery.of(context).size.width - 50,
+                    height: 250,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'link : ',
+                              style: TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              result!.code!,
+                              style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Container(
+                          width: 200,
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                try {
+                                  await launch(result!.code!);
+                                } catch (e) {
+                                  const snackBar = SnackBar(
+                                    content: Text('An error occured'),
+                                    backgroundColor: Colors.red,
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text('Go to Link'),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Icon(Icons.link)
+                                ],
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          width: 200,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  result = null;
+                                  controller!.resumeCamera();
+                                });
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text('Retake'),
+                                  SizedBox(
+                                    width: 50,
+                                  ),
+                                  Icon(Icons.refresh)
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
+                  )),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );

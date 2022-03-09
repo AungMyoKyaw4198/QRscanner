@@ -22,11 +22,15 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          //Display Image
-          const Image(
-              image: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQyYwscUPOH_qPPe8Hp0HAbFNMx-TxRFubpg&usqp=CAU")),
+          const Center(
+              child: Text(
+            'QR Scanner',
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+          )),
 
+          const SizedBox(
+            height: 200,
+          ),
           //First Button
           ElevatedButton(
             onPressed: () {
