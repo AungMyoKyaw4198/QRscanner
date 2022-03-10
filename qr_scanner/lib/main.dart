@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_scanner/splash_screen.dart';
 
 import 'home_page.dart';
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
       ),
       //Declared first page of our app
-      home: const HomePage(),
+      home: const SplashScreen(),
     );
   }
 }

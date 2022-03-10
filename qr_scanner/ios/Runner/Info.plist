@@ -52,5 +52,7 @@
 	<string>https</string>
 	<string>http</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs gallery access to scan QR codes</string>
 </dict>
 </plist>

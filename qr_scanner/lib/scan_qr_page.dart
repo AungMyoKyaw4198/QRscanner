@@ -41,7 +41,7 @@ class _ScanQRState extends State<ScanQR> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Scan QR Code"),
+        title: const Text("Scan QR"),
       ),
       body: Stack(
         children: [
@@ -70,7 +70,15 @@ class _ScanQRState extends State<ScanQR> {
                 children: [
                   IconButton(
                     onPressed: () async {
-                      await controller?.toggleFlash();
+                      await controller
+                          ?.toggleFlash()
+                          .onError((error, stackTrace) {
+                        const snackBar = SnackBar(
+                          content: Text('An error occured'),
+                          backgroundColor: Colors.red,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      });
                       setState(() {});
                     },
                     icon: FutureBuilder(
@@ -95,7 +103,16 @@ class _ScanQRState extends State<ScanQR> {
                   ),
                   IconButton(
                       onPressed: () async {
-                        await controller?.flipCamera();
+                        await controller
+                            ?.flipCamera()
+                            .onError((error, stackTrace) {
+                          const snackBar = SnackBar(
+                            content: Text('An error occured'),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          return CameraFacing.back;
+                        });
                         setState(() {});
                       },
                       icon: const Icon(

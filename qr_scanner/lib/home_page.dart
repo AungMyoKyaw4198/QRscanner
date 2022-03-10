@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_scanner/scan_qr_gallery.dart';
 
 import 'generate_qr_page.dart';
 import 'scan_qr_page.dart';
@@ -22,10 +24,43 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // logo
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              color: Colors.white,
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/images/logo-small.png',
+                    width: 50,
+                    height: 63,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.bottomCenter,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40),
+                    child: Text(
+                      'heckSafe',
+
+                      style: GoogleFonts.workSans(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 48,
+                        fontStyle: FontStyle.normal,
+                      ),
+                      // style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
           const Center(
               child: Text(
             'QR Scanner',
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           )),
 
           const SizedBox(
@@ -38,20 +73,20 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const ScanQR()));
             },
             child: const Text(
-              "Scan QR Code",
+              "Scan QR Code from Camera",
               style: TextStyle(color: Colors.white),
             ),
           ),
           const SizedBox(height: 10),
 
-          //Second Button
+          // Second Button
           ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const GenerateQR()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ScanQRGalleryPage()));
             },
             child: const Text(
-              "Generate QR Code",
+              "Scan QR Code from Gallery",
               style: TextStyle(color: Colors.white),
             ),
           ),
