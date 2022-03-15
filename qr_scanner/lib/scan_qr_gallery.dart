@@ -62,12 +62,19 @@ class _ScanQRGalleryPageState extends State<ScanQRGalleryPage> {
                                     }
                                   },
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(qrData,
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.blue)),
+                                      Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                2,
+                                        child: Text(qrData,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.blue)),
+                                      ),
                                       const SizedBox(
                                         width: 20,
                                       ),
@@ -127,6 +134,7 @@ class _ScanQRGalleryPageState extends State<ScanQRGalleryPage> {
                                   .then((value) {
                                 setState(() {
                                   selectedImage = value;
+                                  qrData = '';
                                 });
                               }).onError((error, stackTrace) {
                                 const snackBar = SnackBar(

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //Given Title
-      title: 'QR Scanner',
+      title: 'CheckSafe QR Scanner',
       debugShowCheckedModeBanner: false,
       //Given Theme Color
       theme: ThemeData(
