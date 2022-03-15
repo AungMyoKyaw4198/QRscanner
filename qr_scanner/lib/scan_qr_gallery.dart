@@ -23,6 +23,7 @@ class _ScanQRGalleryPageState extends State<ScanQRGalleryPage> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Scan QR"),
+        backgroundColor: const Color(0xfffc4f00),
       ),
       body: Container(
           child: selectedImage != null

@@ -42,6 +42,7 @@ class _ScanQRState extends State<ScanQR> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Scan QR"),
+        backgroundColor: const Color(0xfffc4f00),
       ),
       body: Stack(
         children: [
@@ -87,12 +88,12 @@ class _ScanQRState extends State<ScanQR> {
                         if (snapshot.data == true) {
                           return const Icon(
                             Icons.flash_auto,
-                            color: Colors.indigo,
+                            color: Color(0xfffc4f00),
                           );
                         } else {
                           return const Icon(
                             Icons.flash_off,
-                            color: Colors.indigo,
+                            color: Color(0xfffc4f00),
                           );
                         }
                       },
@@ -117,7 +118,7 @@ class _ScanQRState extends State<ScanQR> {
                       },
                       icon: const Icon(
                         Icons.cameraswitch,
-                        color: Colors.indigo,
+                        color: Color(0xfffc4f00),
                       ))
                 ],
               ),
